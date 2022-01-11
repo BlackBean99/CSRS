@@ -2,7 +2,7 @@ package com.weart.csrs.config.auth.dto;
 
 
 import com.weart.csrs.domain.MEMBER.MEMBER;
-import com.weart.csrs.service.Role;
+import com.weart.csrs.web.dto.MEMBERRequest;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,13 +14,15 @@ public class OAuthAttributes {
     private String nameAttributeKey;
     private String name;
     private String email;
+    private String password;
 
     @Builder
-    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email) {
+    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email, String password) {
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.name = name;
         this.email = email;
+        this.password = password;
     }
 
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
@@ -45,17 +47,25 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) response.get("name"))
                 .email((String) response.get("email"))
+                .password((String) response.get("password"))
                 .attributes(response)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
     }
 
-
-    public MEMBER toEntity() {
+    public MEMBER toMEMBER() {
         return MEMBER.builder()
                 .name(name)
                 .email(email)
-                .role(Role.GUEST)
+                .password(password)
+                .build();
+    }
+
+    public MEMBERRequest toRequestDto() {
+        return MEMBERRequest.builder()
+                .name(name)
+                .email(email)
+                .password(password)
                 .build();
     }
 }

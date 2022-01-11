@@ -2,6 +2,7 @@ package com.weart.csrs.domain.MEMBER;
 
 import com.weart.csrs.domain.BaseTimeEntity;
 import com.weart.csrs.service.Role;
+import com.weart.csrs.web.dto.MEMBERRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,7 @@ public class MEMBER extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -36,19 +37,23 @@ public class MEMBER extends BaseTimeEntity {
     @Column(nullable = false)
     private Role role;
 
+    @Column(nullable = false)
+    private String password;
+
     @Builder
-    public MEMBER(int id, String name, String email, String picture, Role role) {
+    public MEMBER(Long id, String name, String email, String picture, Role role, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.role = role;
+        this.password = password;
     }
 
-    public MEMBER update(String name, String email, Role role) {
-        this.name = name;
-        this.email = email;
-        this.role = role;
-        return this;
+    public void update(MEMBERRequest memberRequest) {
+        this.name = memberRequest.getName();
+        this.email = memberRequest.getEmail();
+        this.role = memberRequest.getRole();
+        this.password = memberRequest.getPassword();
     }
 
     public String getRoleKey() {

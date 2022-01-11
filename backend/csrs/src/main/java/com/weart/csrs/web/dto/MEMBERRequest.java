@@ -10,11 +10,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MEMBERDto {
-    private int id;
+public class MEMBERRequest {
+    private Long id;
     private String name;
     private String email;
     private Role role;
+    private String password;
 
     //MEMBER 객체로 변환
     public MEMBER toEntity(){
@@ -23,14 +24,16 @@ public class MEMBERDto {
                 .name(name)
                 .email(email)
                 .role(role)
+                .password(password)
                 .build();
     }
 
     @Builder
-    public MEMBERDto(int id, String name, String email) {
+    public MEMBERRequest(Long id, String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.password = password;
     }
 
 }

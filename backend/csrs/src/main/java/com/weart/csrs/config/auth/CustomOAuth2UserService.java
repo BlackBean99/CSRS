@@ -17,8 +17,8 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final MEMBERRepository memberRepository;
     private final HttpSession httpSession;
@@ -45,9 +45,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
 
     private MEMBER saveOrUpdate(OAuthAttributes attributes) {
-        MEMBER member = memberRepository.findByEmail(attributes.getEmail())
-                .map(entity -> entity.update(attributes.getName(), attributes.getEmail(),attributes.toEntity().getRole()))
-                .orElse(attributes.toEntity());
+//        MEMBER member = memberRepository.findByEmail(attributes.getEmail())
+//                .map(entity -> entity.update(attributes.toRequestDto()));
+//        Optional<MEMBER> member = memberRepository.findByEmail(attributes.getEmail());
+        MEMBER member = attributes.toMEMBER();
         return memberRepository.save(member);
     }
 }
