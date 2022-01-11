@@ -2,8 +2,14 @@ package com.weart.csrs.domain.successfulbid;
 
 import com.weart.csrs.domain.bid.Bid;
 
-import javax.persistence.*;
-import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import java.time.LocalDateTime;
 
 @Entity
 public class SuccessfulBid {
@@ -14,11 +20,10 @@ public class SuccessfulBid {
 
     @OneToOne
     @JoinColumn(name = "BID_ID")
-    @Column(unique = true)
     private Bid bid;
 
     @Column(nullable = false)
-    private Date deadline;
+    private LocalDateTime deadline;
 
     @Column(nullable = false)
     private Boolean purchaseFlag;

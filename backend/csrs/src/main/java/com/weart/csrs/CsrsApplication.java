@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories("com.weart.csrs.Repository")
 @SpringBootApplication
 public class CsrsApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(CsrsApplication.class, args);
 	}

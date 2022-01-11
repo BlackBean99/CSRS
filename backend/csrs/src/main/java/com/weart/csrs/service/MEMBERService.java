@@ -53,4 +53,22 @@ public class MEMBERService {
         return "main";
     }
 
+//    @Transactional
+//    public int update(long id, final MEMBERRequest u) {
+//        Optional<MEMBER> oUser = MEMBERRepository.findById(id);
+//        if(oUser.isPresent())
+//            return 0;
+//
+//        MEMBER user = oUser.get();
+//        user.setBirthDate(u.getBirthDate());
+//        user.setEmail(u.getEmail());
+//        user.setName(u.getName());
+//        user.setPassword(u.getPassword());
+//        user.setPhoneNumber(u.getPhoneNumber());
+//        user.setSex(u.getSex());
+//        user.setType(u.getType());
+//        MEMBERRepository.save(user);
+//        return 1;
+//    }
+
 }
