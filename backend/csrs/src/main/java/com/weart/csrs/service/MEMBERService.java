@@ -99,7 +99,7 @@ public class MEMBERService {
                 .orElseThrow(() -> new RuntimeException(NOT_FOUND_MEMBER_MESSAGE));
         memberRepository.delete(member);
     }
-
+}
 
 //    public void createMember(MEMBER member) {
 //        member.setEmail(member.getEmail());
@@ -108,5 +108,3 @@ public class MEMBERService {
 //        member.setPassword(member.getPassword());
 //        memberRepository.save(member);
 //    }
-
-}
