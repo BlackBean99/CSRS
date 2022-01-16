@@ -1,17 +1,21 @@
 package com.weart.csrs.domain.reliability;
 
+import com.weart.csrs.domain.MEMBER.MEMBER;
 import com.weart.csrs.domain.successfulbid.SuccessfulBid;
+import com.weart.csrs.web.dto.ReliabilityRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 
@@ -24,6 +28,10 @@ public class Reliability {
     @Column(name = "RELIABILITY_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "MEMBER_ID", referencedColumnName = "MEMBER_ID")
+    public MEMBER member;
 
     @OneToOne
     @JoinColumn(name = "SUCCESSFUL_BID_ID")
@@ -38,4 +46,9 @@ public class Reliability {
         this.successfulBid = successfulBid;
         this.warningScore = warningScore;
     }
+    public void update(ReliabilityRequestDto reliabilityRequestDto) {
+        this.successfulBid = reliabilityRequestDto.getSuccessfulBid();
+        this.warningScore = reliabilityRequestDto.getWarningScore();
+    }
+
 }

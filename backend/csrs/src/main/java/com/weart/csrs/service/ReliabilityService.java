@@ -3,6 +3,7 @@ package com.weart.csrs.service;
 import com.weart.csrs.Repository.ReliabilityRepository;
 import com.weart.csrs.domain.MEMBER.MEMBER;
 import com.weart.csrs.domain.reliability.Reliability;
+import com.weart.csrs.web.dto.ReliabilityRequestDto;
 import com.weart.csrs.web.dto.ReliabilityResponseDto;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +21,25 @@ public class ReliabilityService {
 
     private final ReliabilityRepository reliabilityRepository;
 
-     MEMBER member;
+    public Reliability selectReliabilityById(Long id){
+        Reliability MemberReliability = reliabilityRepository.findByMemberId(id)
+                .orElseThrow(() -> new RuntimeException(NOT_FOUND_MEMBER_MESSAGE));
+        return MemberReliability;
+    }
+
+    MEMBER member;
 
     @Autowired
     public ReliabilityService(ReliabilityRepository reliabilityRepository) {
         this.reliabilityRepository = reliabilityRepository;
     }
 
+
     @Transactional
-    public boolean FlagGenerator(SuccessfulBidResponse successfulBidResponse){
+    public boolean FlagGenerator(Long id,LocalDateTime dateTime, boolean deadFlag){
         LocalDateTime current_Time = LocalDateTime.now();
-        if(current_Time == successfulBidResponse.getDeadLine()){
-            if(successfulBidResponse.getPurchaseFlag() == false){
+            if(current_Time == dateTime){
+            if(deadFlag == false){
                 return true;
             }
         }
@@ -44,17 +52,32 @@ public class ReliabilityService {
         if (deadFlag) {
             Reliability currentReliability = reliabilityRepository.save(Reliability.builder()
                     .successfulBid(reliabilityResponseDto.getSuccessfulBid())
-                    .warningScore(reliabilityResponseDto.getWarningScore() - 1).build());
+                    .warningScore(reliabilityResponseDto.getWarningScore() + 1).build());
         }
     }
 
 //    신뢰도가 -2가 된다면 Role GUEST로 변환
 //    백엔드 내에서 처리하기 때문에 Dto를 사용하지않고 거래정지
+//    거래정지 서비스는 제공하지 않고 warningPoint 만 제출하기로 했다.
     @Transactional
-    public void Transaction_Suspension(ReliabilityResponseDto reliabilityResponseDto){
-        if(reliabilityResponseDto.getWarningScore() == -2){
-            member.setRole(Role.GUEST);
+    public Long Transaction_Suspension(ReliabilityResponseDto reliabilityResponseDto){
+        Long warningPoint = reliabilityResponseDto.getWarningScore();
+        if( warningPoint == 2){
+            return warningPoint;
         }
+        return warningPoint;
     }
 
+
+
+    //UPDATE
+    @Transactional
+    public Reliability update(Long memberid, ReliabilityRequestDto reliabilityRequestDto) {
+        //조회시 없으면 에러 표시
+    //반환형 <Optional> Reliability
+        Reliability reliability = reliabilityRepository.findByMemberId(memberid)
+                .orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_MEMBER_MESSAGE));
+            reliability.update(reliabilityRequestDto);
+            return reliability;
+        }
 }
