@@ -1,0 +1,36 @@
+language: java
+jdk:
+  - openjdk8
+
+branches:
+  only:
+    - master
+
+# Travis CI 서버의 Home
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.gradle'
+script: "./gradlew clean build"
+
+before_deploy:
+  - zip -r csrs-weart-webservice *
+  - mkdir -p deploy
+  - mv csrs-weart-webservice.zip deploy/csrs-weart-webservice.zip
+
+deploy:
+  -provider: s3
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECREY_KEY
+  bucket: csrs-weart-webservice
+  region: ap-northeast-2
+  skip_cleanup: true
+  acl: private  # zip  파일 접근을 private로
+  local_dir: deploy디렉토리
+  wait-until-deployed: true
+
+# CI 실행 완료 시 메일로 알람
+notifications:
+  email:
+    recipients:
+      - "ymecca730135@gmail.com"
