@@ -1,58 +1,41 @@
-package com.weart.csrs.service;
-
-import com.weart.csrs.domain.member.Member;
-import com.weart.csrs.domain.member.MemberRepository;
-import com.weart.csrs.domain.member.Role;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import java.util.List;
-import java.util.Optional;
-
-@Transactional
-@Getter
-@Service
-public class MemberService {
-
-    private final MemberRepository memberRepository;
-
-    public List<Member> getByName(String name) throws Exception {
-        return memberRepository.findByName(name);
-    }
-
-    public Optional<Member> getByEmail(String email) throws Exception {
-        return memberRepository.findByEmail(email);
-    }
-
-    @Autowired
-    public MemberService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
-
-    public void createMember(Member member) {
-        member.setEmail(member.getEmail());
-        member.setName(member.getName());
-        member.setRole(Role.valueOf("USER"));
-        memberRepository.save(member);
-    }
-
-
-    //Email로 계정 하나만 생성 가능.
-//    private void validateDuplicateMember(MEMBER member) {
-//        memberRepository.findByEmail(member.getEmail())
-//                .ifPresent(m -> {
-//                    throw new IllegalStateException("이미 존재하는 회원입니다.");
-//                });
+//package com.weart.csrs.service;
+//
+//import com.weart.csrs.domain.member.Member;
+//import com.weart.csrs.domain.member.MemberRepository;
+//import com.weart.csrs.web.dto.MemberSaveRequestDto;
+//import lombok.RequiredArgsConstructor;
+//import org.springframework.stereotype.Service;
+//import org.springframework.transaction.annotation.Transactional;
+//
+//import java.util.List;
+//
+//@RequiredArgsConstructor
+//@Service
+//public class MemberService {
+//    private final MemberRepository memberRepository;
+//    private final String NOT_FOUND_MEMBER_MESSAGE = "찾으시는 유저가 존재하지 않습니다.";
+//
+//    @Transactional
+//    public List<Member> login(String username, String password){
+//    List<Member> member = memberRepository.selectMember(username, password);
+//        return member;
 //    }
-
-    @RequestMapping(value = "/login.do", method = RequestMethod.POST)
-    public String loginMember(Member member) {
-        System.out.println("member : " + member);
-        return "main";
-    }
-
-}
+//
+//    @Transactional
+//    public String save(MemberSaveRequestDto requestDto) {
+//        Member member = memberRepository.save(requestDto.toEntity());
+//        return member.getUsername();
+//    }
+//
+//    @Transactional
+//    public void deleteMember(Long memberId) {
+//        Member member = memberRepository.getById(memberId);
+//        memberRepository.delete(member);
+//    }
+//
+//    @Transactional
+//    public void updateMember(Long memberId, MemberSaveRequestDto memberSaveRequestDto) {
+//        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_MEMBER_MESSAGE));
+//        memberRepository.save(member);
+//    }
+//}
